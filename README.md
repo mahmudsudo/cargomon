@@ -1,13 +1,13 @@
-# Rustmon
+# Cargomon
 
-Rustmon is a Rust implementation inspired by the popular Node.js tool nodemon. It watches your Rust project for file changes and automatically rebuilds and runs your application.
+Cargomon is a Rust implementation inspired by the popular Node.js tool nodemon. It watches your Rust project for file changes and automatically rebuilds and runs your application.
 
 ## Installation
 
-You can install Rustmon using cargo:
+You can install Cargomon using cargo:
 
 ```bash
-cargo install rustmon
+cargo install Cargomon
 ```
 
 ## Usage
@@ -15,12 +15,12 @@ cargo install rustmon
 Navigate to your Rust project directory and run:
 
 ```bash
-rustmon
+Cargomon
 ```
 
 
 
-Rustmon will watch for file changes in your project, rebuild when changes are detected, and run the resulting executable.
+Cargomon will watch for file changes in your project, rebuild when changes are detected, and run the resulting executable.
 
 ## License
 
