@@ -1,5 +1,5 @@
-use rustmon;
+use cargomon;
 
 fn main() {
-    rustmon::run();
+    cargomon::run();
 }

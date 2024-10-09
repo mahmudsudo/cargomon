@@ -1,9 +1,27 @@
+//! Cargomon: A Rust implementation inspired by nodemon
+//!
+//! This crate provides functionality to watch for file changes in a Rust project,
+//! automatically rebuild the project, and run the resulting executable.
+
 use notify::{Watcher, RecursiveMode, watcher};
 use std::sync::mpsc::channel;
 use std::process::Command;
 use std::time::Duration;
-use std::path::Path;
+use std::io::{self, Write};
 
+/// Starts the Cargomon file watcher and build/run loop.
+///
+/// This function sets up a file watcher for the current directory and its subdirectories.
+/// When changes are detected, it rebuilds the project and runs the resulting executable.
+///
+/// # Examples
+///
+/// ```no_run
+/// // In your main.rs file:
+/// fn main() {
+///     cargomon::run();
+/// }
+/// ```
 pub fn run() {
     let (tx, rx) = channel();
 
@@ -17,33 +35,38 @@ pub fn run() {
     loop {
         match rx.recv() {
             Ok(_) => {
-                println!("Change detected. Rebuilding and running...");
+                println!("Change detected. Rebuilding...");
                 
                 // Run cargo build
-                let build_status = Command::new("cargo")
+                let output = Command::new("cargo")
                     .arg("build")
-                    .status()
+                    .output()
                     .expect("Failed to execute cargo build");
 
-                if build_status.success() {
+                if output.status.success() {
                     println!("Build successful. Running the program...");
                     
                     // Find the executable
                     let executable_path = find_executable();
                     
                     // Run the executable
-                    let run_status = Command::new(executable_path)
-                        .status()
+                    let run_output = Command::new(executable_path)
+                        .output()
                         .expect("Failed to run the program");
 
-                    if run_status.success() {
+                    if run_output.status.success() {
+                        io::stdout().write_all(&run_output.stdout).unwrap();
                         println!("Program executed successfully.");
                     } else {
+                        io::stderr().write_all(&run_output.stderr).unwrap();
                         println!("Program execution failed.");
                     }
                 } else {
-                    println!("Build failed.");
+                    println!("Build failed. Error output:");
+                    io::stderr().write_all(&output.stderr).unwrap();
                 }
+                
+                println!("\nContinuing to watch for changes...");
             }
             Err(e) => println!("Watch error: {:?}", e),
         }
@@ -60,4 +83,16 @@ fn find_executable() -> String {
         .expect("Failed to find package name in Cargo.toml");
 
     format!("target/debug/{}", package_name)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_find_executable() {
+        // This test assumes that the current crate is named "cargomon"
+        let executable_path = find_executable();
+        assert_eq!(executable_path, "target/debug/cargomon");
+    }
 }

@@ -2,6 +2,13 @@
 name = "cargomon"
 version = "0.1.0"
 edition = "2021"
+description = "A Rust implementation of nodemon for automatic rebuilding and running of Rust projects"
+license = "MIT"
+repository = "https://github.com/mahmudsudo/cargomon"
+readme = "README.md"
 
 [dependencies]
 notify = "4.0.17"
+
+[lib]
+doctest = true
