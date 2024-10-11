@@ -43,7 +43,7 @@
 
 use notify::{Watcher, RecursiveMode, watcher};
 use std::sync::mpsc::channel;
-use std::process::Command;
+use std::process::Command as ProcessCommand;
 use std::time::{Duration, Instant};
 use std::io::{self, Write};
 use std::path::PathBuf;
@@ -64,11 +64,11 @@ struct Opt {
 
     /// Display help information
     #[structopt(subcommand)]
-    cmd: Option<Command>,
+    cmd: Option<SubCommand>,
 }
 
 #[derive(Debug, StructOpt)]
-enum Command {
+enum SubCommand {
     /// Display detailed help information
     Help,
 }
@@ -104,7 +104,7 @@ enum Command {
 pub fn run() {
     let opt = Opt::from_args();
 
-    if let Some(Command::Help) = opt.cmd {
+    if let Some(SubCommand::Help) = opt.cmd {
         display_help();
         return;
     }
@@ -129,7 +129,7 @@ pub fn run() {
 
                 println!("{}", "Change detected. Rebuilding...".yellow());
                 
-                let output = Command::new("cargo")
+                let output = ProcessCommand::new("cargo")
                     .arg("build")
                     .output()
                     .expect("Failed to execute cargo build");
@@ -139,7 +139,7 @@ pub fn run() {
                     
                     let executable_path = find_executable();
                     
-                    let run_output = Command::new(&executable_path)
+                    let run_output = ProcessCommand::new(&executable_path)
                         .output()
                         .expect("Failed to run the program");
 
@@ -166,8 +166,8 @@ fn display_help() {
     println!("{}", "Cargomon: A Rust implementation inspired by nodemon".green());
     println!("{}", "Usage: cargomon [OPTIONS] [SUBCOMMAND]".yellow());
     println!("\nOptions:");
-    println!("  -w, --watch-path <PATH>    The directory to watch for changes (default: \".\")")
-    println!("  -d, --debounce-secs <SECS> The debounce time in seconds (default: 2)")
+    println!("  -w, --watch-path <PATH>    The directory to watch for changes (default: \".\")");
+    println!("  -d, --debounce-secs <SECS> The debounce time in seconds (default: 2)");
     println!("  -h, --help                 Print help information");
     println!("  -V, --version              Print version information");
     println!("\nSubcommands:");
