@@ -1,0 +1,20 @@
+[package]
+name = "cargomon"
+version = "0.1.0"
+edition = "2021"
+uthors = ["Mahmud Bello <blinkztyler@gmail.com>"]
+description = "A Rust implementation of nodemon for automatic rebuilding and running of Rust projects"
+license = "MIT"
+repository = "https://github.com/mahmudsudo/cargomon"
+readme = "README.md"
+keywords = ["development", "reload", "watch", "build"]
+categories = ["development-tools", "development-tools::build-utils"]
+
+[dependencies]
+notify = "4.0.17"
+colored = "2.0.0"
+structopt = "0.3.26"
+tempfile = "3.2"
+
+[lib]
+doctest = true

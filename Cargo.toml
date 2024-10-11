@@ -1,6 +1,6 @@
 [package]
 name = "cargomon"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2021"
 uthors = ["Mahmud Bello <blinkztyler@gmail.com>"]
 description = "A Rust implementation of nodemon for automatic rebuilding and running of Rust projects"
