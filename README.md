@@ -7,7 +7,7 @@ Cargomon is a Rust implementation inspired by the popular Node.js tool nodemon. 
 You can install Cargomon using cargo:
 
 ```bash
-cargo install Cargomon
+cargo install cargomon
 ```
 
 ## Usage
@@ -15,12 +15,23 @@ cargo install Cargomon
 Navigate to your Rust project directory and run:
 
 ```bash
-Cargomon
+cargomon
 ```
 
 
 
 Cargomon will watch for file changes in your project, rebuild when changes are detected, and run the resulting executable.
+
+## Features
+
+- Automatic rebuilding and restarting of your Rust application
+- Customizable file watching patterns
+- Support for cargo workspaces
+- Configurable through command-line options 
+
+
+
+For more configuration options, run `cargomon --help`.
 
 ## License
 
@@ -29,3 +40,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
+
+## Acknowledgements
+
+This project was inspired by [nodemon](https://nodemon.io/) for Node.js.

@@ -61,6 +61,16 @@ struct Opt {
     /// The debounce time in seconds
     #[structopt(short, long, default_value = "2")]
     debounce_secs: u64,
+
+    /// Display help information
+    #[structopt(subcommand)]
+    cmd: Option<Command>,
+}
+
+#[derive(Debug, StructOpt)]
+enum Command {
+    /// Display detailed help information
+    Help,
 }
 
 /// Starts the Cargomon file watcher and build/run loop.
@@ -93,6 +103,12 @@ struct Opt {
 /// ```
 pub fn run() {
     let opt = Opt::from_args();
+
+    if let Some(Command::Help) = opt.cmd {
+        display_help();
+        return;
+    }
+
     let (tx, rx) = channel();
 
     let mut watcher = watcher(tx, Duration::from_secs(1)).unwrap();
@@ -144,6 +160,27 @@ pub fn run() {
             Err(e) => println!("{}", format!("Watch error: {:?}", e).red()),
         }
     }
+}
+
+fn display_help() {
+    println!("{}", "Cargomon: A Rust implementation inspired by nodemon".green());
+    println!("{}", "Usage: cargomon [OPTIONS] [SUBCOMMAND]".yellow());
+    println!("\nOptions:");
+    println!("  -w, --watch-path <PATH>    The directory to watch for changes (default: \".\")")
+    println!("  -d, --debounce-secs <SECS> The debounce time in seconds (default: 2)")
+    println!("  -h, --help                 Print help information");
+    println!("  -V, --version              Print version information");
+    println!("\nSubcommands:");
+    println!("  help    Display this help message");
+    println!("\nDescription:");
+    println!("Cargomon watches your Rust project for file changes and automatically");
+    println!("rebuilds and runs your application. It helps streamline the development");
+    println!("process by eliminating the need to manually recompile and restart your");
+    println!("application after each change.");
+    println!("\nExamples:");
+    println!("  cargomon");
+    println!("  cargomon --watch-path ./src --debounce-secs 5");
+    println!("  cargomon help");
 }
 
 fn find_executable() -> String {
